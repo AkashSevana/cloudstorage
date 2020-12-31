@@ -12,7 +12,8 @@ CREATE TABLE IF NOT EXISTS NOTES (
     notetitle VARCHAR(20),
     notedescription VARCHAR (1000),
     userid INT,
-    foreign key (userid) references USERS(userid)
+    foreign key (userid) references USERS(userid),
+    CONSTRAINT UNIQUE_NOTE UNIQUE (notetitle, userid)
 );
 
 CREATE TABLE IF NOT EXISTS FILES (
@@ -22,7 +23,8 @@ CREATE TABLE IF NOT EXISTS FILES (
     filesize VARCHAR,
     userid INT,
     filedata BLOB,
-    foreign key (userid) references USERS(userid)
+    foreign key (userid) references USERS(userid),
+    CONSTRAINT UNIQUE_FILE UNIQUE (filename, userid)
 );
 
 CREATE TABLE IF NOT EXISTS CREDENTIALS (
@@ -32,5 +34,8 @@ CREATE TABLE IF NOT EXISTS CREDENTIALS (
     key VARCHAR,
     password VARCHAR,
     userid INT,
-    foreign key (userid) references USERS(userid)
+    foreign key (userid) references USERS(userid),
+    CONSTRAINT UNIQUE_CREDENTIALS UNIQUE (url, userid)
 );
+
+INSERT INTO USERS (username, salt, password, firstname, lastname) VALUES('AkashSevana', 'ctjeyvabvLXnRTnbRdSlPg==', 'W612xxbdswp/mVpsplF2WA==', 'Akash', 'Sevana');
