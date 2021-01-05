@@ -10,14 +10,16 @@
     </head>
     <body class="p-3 mb-2 bg-light text-black">
         <div class="container">
+            <div id="operationAlert">
+                <div th:if="${success}" class="alert alert-success fill-parent">
+                    <span>Your changes were successfully saved.</span>
+                </div>
+                <div th:if="${customError}" class="alert alert-danger fill-parent">
+                    <span th:text="${customError}">Example Error Message</span>
+                </div>
+            </div>
             <div id="logoutDiv">
                 <form action="#" th:action="@{/logout}" method="POST">
-                    <div th:if="${success}" class="alert alert-success fill-parent">
-                        <span>Your changes were successfully saved.</span>
-                    </div>
-                    <div th:if="${customError}" class="alert alert-danger fill-parent">
-                        <span th:text="${customError}">Example Error Message</span>
-                    </div>
                     <button type="submit" class="btn btn-secondary float-right" id="logoutButton">Logout</button>
                 </form>
             </div>

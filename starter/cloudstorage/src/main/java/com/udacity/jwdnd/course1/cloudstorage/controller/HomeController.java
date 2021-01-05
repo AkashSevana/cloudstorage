@@ -8,6 +8,7 @@ import com.udacity.jwdnd.course1.cloudstorage.services.EncryptionService;
 import com.udacity.jwdnd.course1.cloudstorage.services.FileService;
 import com.udacity.jwdnd.course1.cloudstorage.services.NoteService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -16,13 +17,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
 
 @Controller
 @RequestMapping("/home")
@@ -34,6 +30,10 @@ public class HomeController {
     private static final String ERROR_WHILE_SAVING_DATA = "Error while saving data";
     private static final String SUCCESS = "success";
     private static final String DELETING = "{} deleting";
+
+    @Value("${maxFileSize}")
+    private Long maxFileSize;
+
     private FileService fileService;
     private NoteService noteService;
     private CredentialService credentialService;
@@ -66,6 +66,11 @@ public class HomeController {
         String userName = (String) authentication.getPrincipal();
         log.info("File received {}", fileUpload.getOriginalFilename());
         if (fileUpload.isEmpty()) {
+            model.addAttribute(CUSTOM_ERROR, "Please select a file!");
+            return homeView(authentication, model);
+        }
+        if (fileUpload.getSize() > maxFileSize) {
+            model.addAttribute(CUSTOM_ERROR, "File too large!");
             return homeView(authentication, model);
         }
         try {

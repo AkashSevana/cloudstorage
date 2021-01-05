@@ -34,6 +34,7 @@ public class SignupController {
             commonValidator.validateUser(user);
             userService.createUser(user);
             model.addAttribute("signupSuccess", true);
+            return "login";
         } catch (ResponseStatusException responseStatusException) {
             model.addAttribute("signupError", responseStatusException.getReason());
         }
